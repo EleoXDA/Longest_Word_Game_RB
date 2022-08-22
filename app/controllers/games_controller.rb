@@ -7,6 +7,8 @@ class GamesController < ApplicationController
     @score = session[:score]
   end
 
+
+
   def store_score(score)
     session[:score].nil? ? session[:score] = 0 : session[:score] += score
   end
@@ -28,15 +30,12 @@ class GamesController < ApplicationController
     end
 
     url = "https://wagon-dictionary.herokuapp.com/#{answer.join}"
-    @url2 = "https://wagon-dictionary.herokuapp.com/#{params[:word]}"
     parse = JSON.parse(URI.open(url).read)
     check = parse['found']
 
     if check_array.sort == answer.sort && check == true
       @output = 'Congratulations! You win'
       score = answer.length
-    elsif @url2[:found] == true && check == true
-      @output = 'Valid Word, but not correct one'
     elsif check == false
       @output = 'WORD is not in the dictionary'
     elsif check_array.sort != answer.sort

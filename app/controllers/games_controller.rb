@@ -36,6 +36,8 @@ class GamesController < ApplicationController
       score = answer.length
     elsif check == false
       @output = 'WORD is not in the dictionary'
+    elsif check_array.sort != answer.sort
+      @output = 'WORD does not contain required letters'
     end
 
     store_score(score)

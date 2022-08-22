@@ -28,16 +28,17 @@ class GamesController < ApplicationController
     end
 
     url = "https://wagon-dictionary.herokuapp.com/#{answer.join}"
+    url2 = "https://wagon-dictionary.herokuapp.com/#{params[:word]}"
     parse = JSON.parse(URI.open(url).read)
     check = parse['found']
 
     if check_array.sort == answer.sort && check == true
       @output = 'Congratulations! You win'
       score = answer.length
+    elsif @url2[:found] == true && check == true
+      @output = 'Valid Word, but not correct one'
     elsif check == false
       @output = 'WORD is not in the dictionary'
-    elsif check_array.sort != answer.sort
-      @output = 'WORD does not contain required letters'
     end
 
     store_score(score)

@@ -2,7 +2,7 @@ require 'open-uri'
 
 class GamesController < ApplicationController
   def new
-    @letters = Array.new(5) { %w[A E I O U Y].sample }
+    @letters = Array.new(5) { %w[A E I O U].sample }
     @letters += Array.new(5) { (('A'..'Z').to_a - %w[A E I O U Y]).sample }
     @score = session[:score]
   end
@@ -38,7 +38,7 @@ class GamesController < ApplicationController
       score = answer.length
     elsif check == false
       @output = 'WORD is not in the dictionary'
-    elsif check_array.sort != answer.sort
+    elsif check_array.sort == answer.sort
       @output = 'WORD does not contain required letters'
     end
 

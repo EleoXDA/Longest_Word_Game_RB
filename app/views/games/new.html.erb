@@ -1,5 +1,8 @@
-<form action="TODO" method="TODO" data-turbo="false">
-
+<form action="score" method="POST" data-turbo="false">
+  <input type="text" name="answer">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+  <%= hidden_field_tag :letters, @letters %>
+  <input type="submit" value="Check!">
 </form>
 
 <%= hidden_field_tag :authenticity_token, form_authenticity_token %>

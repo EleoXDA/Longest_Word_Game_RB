@@ -28,7 +28,7 @@ class GamesController < ApplicationController
     end
 
     url = "https://wagon-dictionary.herokuapp.com/#{answer.join}"
-    url2 = "https://wagon-dictionary.herokuapp.com/#{params[:word]}"
+    @url2 = "https://wagon-dictionary.herokuapp.com/#{params[:word]}"
     parse = JSON.parse(URI.open(url).read)
     check = parse['found']
 

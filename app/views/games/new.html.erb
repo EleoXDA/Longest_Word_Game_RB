@@ -1,13 +1,18 @@
+<div class="container">
+  <h1>New game</h1>
+
   <% @letters.each do |letter| %>
     <%= tag.a letter.capitalize, class:'btn btn-primary' %>
   <%end%>
 
-<form action="score" method="POST" data-turbo="false">
-  <input type="text" name="answer">
-  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-  <%= hidden_field_tag :letters, @letters %>
-  <input type="submit" value="Check!">
-</form>
+  <p class="form-prefix">What is the longest word you can find?</p>
 
-<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-<%= hidden_field_tag :letters, @letters %>
+  <form action="/score" method="POST" data-turbo="false">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= hidden_field_tag :letters, @letters %>
+    <div class="input-group">
+      <input type="text" name="word" class="form-control">
+      <input type="submit" value="Play" class="btn btn-primary">
+    </div>
+  </form>
+</div>

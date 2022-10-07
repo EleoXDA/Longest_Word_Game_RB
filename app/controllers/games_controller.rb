@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 require 'open-uri'
 
+# .rubocop.yml
 class GamesController < ApplicationController
+  VOWELS = %w[A E I O U Y].freeze
+
   def new
-    @letters = Array.new(5) { %w[A E I O U].sample }
-    @letters += Array.new(5) { (('A'..'Z').to_a - %w[A E I O U Y]).sample }
-    @score = session[:score]
+    @letters = Array.new(5) { VOWELS.sample }
+    @letters += Array.new(5) { (('A'..'Z').to_a - VOWELS).sample }
+    @letters.shuffle!
   end
-
-
 
   def store_score(score)
     session[:score].nil? ? session[:score] = 0 : session[:score] += score
@@ -18,30 +21,21 @@ class GamesController < ApplicationController
   end
 
   def score
-    letters = params[:letters]
-    answer = params[:answer].split('')
-    check_array = []
-    score = 0
+    @letters = params[:letters].split
+    @word = (params[:word] || "").upcase
+    @included = included?(@word, @letters)
+    @english_word = english_word?(@word)
+  end
 
-    answer.each do |a|
-      if letters.include?(a)
-        check_array.push(a)
-      end
-    end
+  private
 
-    url = "https://wagon-dictionary.herokuapp.com/#{answer.join}"
-    parse = JSON.parse(URI.open(url).read)
-    check = parse['found']
+  def included?(word, letters)
+    word.chars.all? { |letter| word.count(letter) <= letters.count(letter) }
+  end
 
-    if check_array.sort == answer.sort && check == true
-      @output = 'Congratulations! You win'
-      score = answer.length
-    elsif check == false
-      @output = 'WORD is not in the dictionary'
-    elsif check_array.sort == answer.sort
-      @output = 'WORD does not contain required letters'
-    end
-
-    store_score(score)
+  def english_word?(word)
+    response = URI.open("https://wagon-dictionary.herokuapp.com/#{word}")
+    json = JSON.parse(response.read)
+    json['found']
   end
 end
